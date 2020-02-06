@@ -1,7 +1,8 @@
 package api
 
 import (
-    "math/rand"
+	"math/rand"
+	"time"
 )
 
 var (
@@ -57,6 +58,7 @@ var (
 
 // GetDockerName returns a randomize DockerName variable
 func (a *apiService) GetDockerName() DockerName {
+	rand.Seed(time.Now().UTC().UnixNano())
 	randomNameIndex := rand.Intn(len(nameMap) - 1)
 	randomDescriptionIndex := rand.Intn(len(descriptionMap) - 1)
 
