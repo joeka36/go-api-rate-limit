@@ -2,7 +2,6 @@ package transport
 
 import (
 	"go-rate-limit/errs"
-
 	"github.com/dgrijalva/jwt-go"
 )
 
@@ -29,3 +28,16 @@ func ValidateUserEmail(tokenString string) (string, error) {
 
 	return c["email"].(string), nil
 }
+
+// ValidateAPIKey validates the given API key against the user data
+func ValidateAPIKey(email string, apiKey string) error {
+	if apiKey == "" {
+		return errs.NoAPIKey
+	}
+
+	if APIUsers[email].Key != apiKey {
+		return errs.IncorrectAPIKey
+	}
+
+	return nil
+} 
