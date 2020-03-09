@@ -11,4 +11,5 @@ var (
 	NoAPIKey = errors.New("No API Key provided")
 	IncorrectAPIKey = errors.New("Invalid API key given")
 	RedisConnectionErr = errors.New("Redis connection refused")
+	MaxUsageErr = errors.New("Max API Usage")
 )

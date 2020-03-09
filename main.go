@@ -1,17 +1,31 @@
 package main
 
 import (
-    "fmt"
-    "log"
-    "net/http"
-    "go-rate-limit/api"
+	"go-rate-limit/api"
+	"go-rate-limit/errs"
+	"go-rate-limit/redis"
+	"log"
+	"net/http"
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintf(w, "API Currently Running", r.URL.Path[1:])
+func initRedis() error {
+	client := redis.CreateClient()
+	_, err := client.Ping().Result()
+
+	if err != nil {
+		return errs.RedisConnectionErr
+    }
+    
+    return nil
 }
 
 func main() {
-    http.HandleFunc("/docker-name", api.GetDockerName)
-    log.Fatal(http.ListenAndServe(":8080", nil))
+    err := initRedis()
+    if err != nil {
+        log.Print(err.Error())
+        return
+    }
+
+	http.HandleFunc("/docker-name", api.GetDockerName)
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
